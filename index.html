@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Visual Detective | Case File: The Arrival</title>
+    <!-- Lucide Icons for visual cues -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --paper-color: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --accent-blue: #3182ce;
+            --accent-red: #e53e3e;
+            --accent-green: #38a169;
+            --highlight-blue: rgba(49, 130, 206, 0.2);
+            --highlight-red: rgba(229, 62, 62, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--paper-color);
+            padding: 40px;
+            border-radius: 2px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-top: 8px solid var(--text-primary);
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            border: 3px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 5px 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transform: rotate(-15deg);
+            opacity: 0.7;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px dashed var(--text-secondary);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle { color: var(--text-secondary); font-style: italic; }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            margin-top: 30px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+
+        /* --- EVIDENCE PLACEHOLDERS --- */
+        .evidence-slot {
+            margin: 15px 0 25px 0;
+            border: 2px dashed #cbd5e0;
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .evidence-slot img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .evidence-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #718096;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Investigation Box */
+        .investigation-box {
+            background: #f7fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        /* Strategy Card */
+        .strategy-card {
+            background: #f0fff4;
+            border-left: 5px solid var(--accent-green);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .strategy-title {
+            color: var(--accent-green);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Forms */
+        .question-group { margin-bottom: 15px; }
+        .question-label { font-weight: 600; display: block; margin-bottom: 5px; color: var(--text-primary); }
+        textarea, input[type="text"] {
+            width: 100%; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 4px; padding: 10px;
+            font-family: inherit; margin-top: 5px; resize: vertical;
+        }
+        textarea:focus, input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2); }
+
+        /* Reading Text */
+        .story-text { font-size: 1.1rem; color: #1a202c; white-space: pre-wrap; padding: 0 10px; }
+        .article-section-title { font-weight: bold; color: var(--accent-blue); margin-top: 30px; margin-bottom: 10px; display: block; font-size: 1.2rem; }
+
+        /* Interactive Highlights */
+        .clue { cursor: pointer; border-radius: 3px; transition: all 0.3s ease; }
+        .clue-dilemma.revealed { background-color: var(--highlight-blue); border-bottom: 2px solid var(--accent-blue); }
+        .clue-symbol.revealed { background-color: var(--highlight-red); border-bottom: 2px solid var(--accent-red); }
+
+        /* Buttons */
+        .detective-kit {
+            display: flex; justify-content: center; gap: 15px; margin: 25px 0; flex-wrap: wrap;
+            position: sticky; top: 10px; z-index: 100; background: rgba(255,255,255,0.9);
+            padding: 10px; border-radius: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tool-btn {
+            display: flex; align-items: center; gap: 8px; padding: 8px 20px; border: none; border-radius: 50px;
+            font-weight: 600; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; font-size: 0.9rem;
+        }
+        .tool-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-blue { background-color: var(--accent-blue); color: white; }
+        .btn-red { background-color: var(--accent-red); color: white; }
+
+        /* Reveal Cards */
+        .file-card {
+            display: none; margin: 20px 0; padding: 20px; border-radius: 8px;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-blue { background-color: #ebf8ff; border-left: 5px solid var(--accent-blue); }
+        .card-red { background-color: #fff5f5; border-left: 5px solid var(--accent-red); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Extension Grid */
+        .extension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; }
+        .report-form { background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 6px; position: relative; }
+        .report-form::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 6px 6px 0 0; }
+        .report-flashback::before { background: #ecc94b; }
+        .report-cliffhanger::before { background: #2d3748; }
+
+        @media (max-width: 768px) { .extension-grid { grid-template-columns: 1fr; } .container { padding: 20px; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="stamp">Case #29-B</div>
+    
+    <header>
+        <h1>The Visual Detective</h1>
+        <div class="subtitle">Subject: Literary Analysis & Visual Literacy</div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- SECTION 1: PRELIMINARY INVESTIGATION -->
+    <!-- ========================================== -->
+    <div class="section-label">
+        <i data-lucide="scan-eye" size="16"></i> Phase 1: Preliminary Investigation
+    </div>
+
+    <!-- PRE-READING VISUALS -->
+    <div class="investigation-box">
+        <h3>Activity 1: Witness Observation</h3>
+        <p>Before reading, carefully observe the visuals below (From Section 2: "The Arrival").</p>
+        
+        <!-- Displaying Section 2 Image for the observation activity as it contains the key visual elements -->
+        <div style="text-align:center; margin-bottom:20px;">
+             <img src="https://drive.google.com/open?id=1sHTNuRWtb0TDIiiYp8rqZdIAdbT7gg0U&usp=drive_fs" 
+                  alt="Visual Evidence for Observation" 
+                  style="max-width:100%; border:1px solid #ccc; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="question-group">
+            <label class="question-label">What do you think the story is about?</label>
+            <textarea rows="2" placeholder="Record your initial theory here..."></textarea>
+        </div>
+        <div class="question-group">
+            <label class="question-label">Who are the people in the pictures? What is their relationship?</label>
+            <textarea rows="2" placeholder="Identify the subjects..."></textarea>
+        </div>
+    </div>
+
+    <div class="strategy-card">
+        <div class="strategy-title">
+            <i data-lucide="book-open"></i> Reading Strategy: Interpreting Visual Clues
+        </div>
+        <p>When you read a story with images, try to spot:</p>
+        <ul>
+            <li><strong>Symbolism:</strong> the use of an object / figure / idea to represent something else.</li>
+            <li><strong>Mood:</strong> the atmosphere that words, pictures, or colors create.</li>
+            <li><strong>Perspective:</strong> who is telling the story.</li>
+        </ul>
+    </div>
+
+    <div class="investigation-box">
+        <h3>Activity 2: Deduction</h3>
+        <p>Study the reading strategy above and look at the images again. Answer the questions:</p>
+
+        <div class="question-group">
+            <label class="question-label">1. What is the setting for the story? Is it a safe place or a dangerous place?</label>
+            <input type="text" placeholder="Describe the setting...">
+        </div>
+        <div class="question-group">
+            <label class="question-label">2. Who is telling the story? Does the perspective change at all?</label>
+            <input type="text" placeholder="Identify the narrator...">
+        </div>
+        <div class="question-group">
+            <label class="question-label">3. What does the use of color and shading say about mood?</label>
+            <input type="text" placeholder="Analyze the colors...">
+        </div>
+        <div class="question-group">
+            <label class="question-label">4. Do the pictures make you feel empathy for the main character? Why?</label>
+            <input type="text" placeholder="Your emotional response...">
+        </div>
+        <div class="question-group">
+            <label class="question-label">5. What do you think the dragon's tail symbolizes?</label>
+            <input type="text" placeholder="Interpret the symbol...">
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 2: THE EVIDENCE LOG (READING) -->
+    <!-- ========================================== -->
+    <div class="section-label">
+        <i data-lucide="file-text" size="16"></i> Phase 2: The Evidence Log
+    </div>
+
+    <div class="detective-kit">
+        <button class="tool-btn btn-blue" onclick="toggleClue('dilemma')">
+            <i data-lucide="search"></i> Detect Dilemma
+        </button>
+        <button class="tool-btn btn-red" onclick="toggleClue('symbol')">
+            <i data-lucide="eye"></i> Detect Symbolism
+        </button>
+    </div>
+
+    <div class="story-text">
+        
+        <!-- SECTION 1 -->
+        <span class="article-section-title">1. What is a graphic novel?</span>
+        
+        <!-- SECTION 1 EVIDENCE -->
+        <div class="evidence-slot">
+            <span class="evidence-label">Visual Evidence: Section 1</span>
+            <img src="https://drive.google.com/open?id=1924wUkXIItHn2xF3Jk2zGHMckNqWteCY&usp=drive_fs" alt="Section 1 Visuals">
+        </div>
+
+        A graphic novel tells a story, just like a prose novel. However, it uses words and pictures, and sometimes only pictures, to get its message across. In some ways graphic novels are similar to movies, with dialogue, sound effects, and motion lines that suggest movement. In other ways they are similar to poetry, using images and color to suggest feelings and mood. Just like other novels, they use literary techniques, like symbolism and metaphor. And they often explore the same themes, such as adventure, belonging, and self-discovery.
+
+
+        <!-- SECTION 2 -->
+        <span class="article-section-title">2. Can you give an example?</span>
+
+        <!-- SECTION 2 EVIDENCE -->
+        <div class="evidence-slot">
+            <span class="evidence-label">Visual Evidence: Section 2 (The Arrival)</span>
+            <img src="https://drive.google.com/open?id=1sHTNuRWtb0TDIiiYp8rqZdIAdbT7gg0U&usp=drive_fs" alt="Section 2 Visuals">
+        </div>
+
+        The Arrival by Shaun Tan is a good example of a graphic novel, and it tells the story of a journey: <span id="text-dilemma" class="clue clue-dilemma">a young man leaves his home and his family in search of a better life.</span> The Arrival uses pictures rather than words as it follows his journey to a new land with new opportunities. The story opens with a sequence of small pictures showing someone packing a suitcase with personal items. The gloomy colors in the picture create a feeling of sadness. On the next page, the perspective changes, and we see the suitcase on a table and the man and woman carefully closing it. The final picture shows the family walking along the street outside. <span id="text-symbol" class="clue clue-symbol">There is the shadow of a dragon's tail on the wall that looks dark and threatening. It's a symbol of the danger they want to escape.</span>
+
+
+        <!-- SECTION 3 -->
+        <span class="article-section-title">3. So when did people start using pictures to tell stories?</span>
+
+        <!-- SECTION 3 EVIDENCE -->
+        <div class="evidence-slot">
+            <span class="evidence-label">Visual Evidence: Section 3</span>
+            <img src="https://drive.google.com/open?id=1kwTaom79ahBhC7g9a_cJcmOhvrbUzWqJ&usp=drive_fs" alt="Section 3 Visuals">
+        </div>
+
+        People have been telling stories with pictures for thousands of years, from early cave paintings to hieroglyphs, to medieval tapestries. In the 20th century, comic books continued this visual tradition, combining words and pictures in a sequential narrative. The pictures showed emotion, perspective, and mood in a much more immediate way than words and by the 1940s comics had become incredibly popular. Millions of people read their tales of superheroes and supervillains every week. However, in the 1950s things changed. Comic books began to be associated with poor literacy - they were seen as less "mature" than "real" books because of their text bubbles and simple storylines. In the 1960s, this criticism, combined with the rise of TV, meant that fewer and fewer people read comic books. However, some people still loved them, and in the 1970s, more sophisticated comic books were created, with longer, more complex narratives. They explored characterization, theme, and symbols in the same way as serious literature. These books were the first graphic novels.
+
+
+        <!-- SECTION 4 -->
+        <span class="article-section-title">4. But are graphic novels easier to read than prose books?</span>
+
+        <!-- SECTION 4 EVIDENCE -->
+        <div class="evidence-slot">
+            <span class="evidence-label">Visual Evidence: Section 4</span>
+            <img src="https://drive.google.com/open?id=1VjD_zW27mShoZrw6QCFhR-g1hoRBtx_w&usp=drive_fs" alt="Section 4 Visuals">
+        </div>
+
+        Not really. People think they are easier because readers don't have to imagine the characters, settings, and action. And imagery and metaphor are often visual and may seem simpler to interpret. However, it's not always easy to figure out visual clues, or to understand how the story develops and how meaning changes from one panel to the next. When you read a graphic novel, you need literary reading skills and visual literacy skills; you need to understand images, as well as prose. The skills we use when we read graphic novels help us navigate the other visual narratives that we see around us every day.
+    </div>
+
+    <!-- Hidden Findings -->
+    <div id="card-dilemma" class="file-card card-blue">
+        <h3 style="margin-top:0; display:flex; align-items:center; gap:10px;">
+            <i data-lucide="check-circle"></i> DILEMMA DETECTED
+        </h3>
+        <p><strong>Definition:</strong> A difficult problem or choice a character must make.</p>
+        <p><strong>Analysis:</strong> The character faces a heartbreaking choice: stay in a dangerous home with family, or leave alone to find safety. This internal conflict drives the plot.</p>
+    </div>
+
+    <div id="card-symbol" class="file-card card-red">
+        <h3 style="margin-top:0; display:flex; align-items:center; gap:10px;">
+            <i data-lucide="check-circle"></i> SYMBOLISM DETECTED
+        </h3>
+        <p><strong>Definition:</strong> When an object represents a bigger, abstract idea.</p>
+        <p><strong>Analysis:</strong> The "Dragon's Tail" is not literal. It represents the abstract concept of oppression, war, or fear that hangs over the family.</p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 3: EXTENSION ACTIVITIES -->
+    <!-- ========================================== -->
+    <div class="section-label">
+        <i data-lucide="pen-tool" size="16"></i> Phase 3: Field Reports (Extension)
+    </div>
+
+    <div class="extension-grid">
+        <div class="report-form report-flashback">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <strong>The Flashback</strong>
+                <span style="background:#fefcbf; padding:2px 6px; border-radius:4px; font-size:0.8em;">Task A</span>
+            </div>
+            <p style="font-size: 0.9rem; color: #666;">The text mentions he is "packing a suitcase with personal items." Choose one item. What memory does it trigger?</p>
+            <textarea rows="4" placeholder="Item: An old pocket watch.&#10;&#10;Memory: He remembered the day his grandfather gave it to him..."></textarea>
+        </div>
+
+        <div class="report-form report-cliffhanger">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <strong>The Cliffhanger</strong>
+                <span style="background:#edf2f7; padding:2px 6px; border-radius:4px; font-size:0.8em;">Task B</span>
+            </div>
+            <p style="font-size: 0.9rem; color: #666;">The excerpt ends as they walk outside. Write the very next sentence. Make something unexpected happen!</p>
+            <textarea rows="4" placeholder="As they stepped onto the cobblestones, a sudden siren wailed from the tower, and..."></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    function toggleClue(type) {
+        // Toggle text highlight
+        const textElement = document.getElementById(`text-${type}`);
+        if (textElement) textElement.classList.toggle('revealed');
+
+        // Toggle card visibility
+        const cardElement = document.getElementById(`card-${type}`);
+        if (cardElement.style.display === 'block') {
+            cardElement.style.display = 'none';
+        } else {
+            cardElement.style.display = 'block';
+            cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    // AUTO-CONVERT GOOGLE DRIVE LINKS
+    // This script runs automatically to fix standard Google Drive "open?id=" links
+    // into direct image links that work in <img> tags.
+    document.addEventListener('DOMContentLoaded', () => {
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            const src = img.getAttribute('src');
+            // Check if it's a google drive link
+            if (src && src.includes('drive.google.com')) {
+                // Try to extract the ID from "id=" parameter or "/d/ID" path
+                let fileId = null;
+                
+                // Case 1: url contains ?id=
+                const urlParams = new URL(src).searchParams;
+                if (urlParams.has('id')) {
+                    fileId = urlParams.get('id');
+                }
+                
+                // Case 2: url like /d/FILE_ID/
+                if (!fileId && src.includes('/d/')) {
+                    const match = src.match(/\/d\/(.*?)\//);
+                    if (match && match[1]) {
+                        fileId = match[1];
+                    }
+                }
+
+                if (fileId) {
+                    // Replace with the direct export link
+                    img.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
