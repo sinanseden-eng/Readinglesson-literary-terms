@@ -163,6 +163,16 @@
             margin-bottom: 10px;
             text-transform: uppercase;
         }
+        
+        /* Strategy List Two Columns */
+        .strategy-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            padding-left: 20px;
+        }
+        
+        @media (max-width: 600px) { .strategy-list { grid-template-columns: 1fr; } }
 
         /* Forms */
         .question-group { margin-bottom: 15px; }
@@ -267,10 +277,28 @@
         Phase 1: Preliminary Investigation
     </div>
 
-    <!-- PRE-READING VISUALS -->
+    <!-- STRATEGY CARD (Moved to Top of Phase 1 for Reference) -->
+    <div class="strategy-card">
+        <div class="strategy-title">
+             📖 Detective's Handbook: Literary Terms
+        </div>
+        <p>Use these tools to analyze the story:</p>
+        <ul class="strategy-list">
+            <li><strong>Dilemma:</strong> A difficult choice for a character.</li>
+            <li><strong>Symbolism:</strong> An object representing a bigger idea.</li>
+            <li><strong>Mood:</strong> The atmosphere created by colors/style.</li>
+            <li><strong>Perspective:</strong> Whose point of view is shown?</li>
+            <li><strong>Foreshadowing:</strong> A hint of future events.</li>
+            <li><strong>Flashback:</strong> A memory of the past.</li>
+            <li><strong>Cliffhanger:</strong> An abrupt, suspenseful ending.</li>
+            <li><strong>Metaphor:</strong> A visual comparison (e.g., monster as danger).</li>
+        </ul>
+    </div>
+
+    <!-- ACTIVITY 1: THE DILEMMA -->
     <div class="investigation-box">
-        <h3>Activity 1: Witness Observation</h3>
-        <p><strong>Exhibit A: The Opening Sequence.</strong> Flip through the slides below to see the first 6 pages of the graphic novel.</p>
+        <h3>Activity 1: Identifying the Dilemma</h3>
+        <p><strong>Exhibit A: The Opening Sequence.</strong> Flip through the slides below. Pay close attention to the <strong>man's face</strong> and actions.</p>
         
         <!-- EMBEDDED GOOGLE SLIDES -->
         <div class="slide-wrapper">
@@ -278,50 +306,39 @@
         </div>
 
         <div class="question-group">
-            <label class="question-label">What do you think the story is about?</label>
-            <textarea rows="2" placeholder="Record your initial theory here..."></textarea>
+            <label class="question-label">1. Focus on the man. He is packing a suitcase to leave his family. Why is this a <strong>Dilemma</strong> (a difficult choice)?</label>
+            <textarea rows="2" placeholder="He is torn between..."></textarea>
         </div>
         <div class="question-group">
-            <label class="question-label">Who are the people in the pictures? What is their relationship?</label>
-            <textarea rows="2" placeholder="Identify the subjects..."></textarea>
+            <label class="question-label">2. From the man's <strong>perspective</strong>, how does he feel about leaving? What visual clues (face, hands, suitcase) tell you this?</label>
+            <textarea rows="2" placeholder="His expression shows..."></textarea>
         </div>
     </div>
 
-    <div class="strategy-card">
-        <div class="strategy-title">
-             📖 Reading Strategy: Interpreting Visual Clues
-        </div>
-        <p>When you read a story with images, try to spot:</p>
-        <ul>
-            <li><strong>Symbolism:</strong> the use of an object / figure / idea to represent something else.</li>
-            <li><strong>Mood:</strong> the atmosphere that words, pictures, or colors create.</li>
-            <li><strong>Perspective:</strong> who is telling the story.</li>
-        </ul>
-    </div>
-
+    <!-- ACTIVITY 2: DEDUCTION -->
     <div class="investigation-box">
-        <h3>Activity 2: Deduction</h3>
-        <p>Study the reading strategy above. Flip through the slides in Activity 1 again to find clues. Answer the questions:</p>
+        <h3>Activity 2: Deduction & Visual Analysis</h3>
+        <p>Now, broaden your investigation to the world around him. Use your Detective Handbook terms.</p>
 
         <div class="question-group">
-            <label class="question-label">1. What is the setting for the story? Is it a safe place or a dangerous place?</label>
+            <label class="question-label">1. <strong>Setting:</strong> Is the place they are walking through safe or dangerous? How do you know?</label>
             <input type="text" placeholder="Describe the setting...">
         </div>
         <div class="question-group">
-            <label class="question-label">2. Who is telling the story? Does the perspective change at all?</label>
-            <input type="text" placeholder="Identify the narrator...">
+            <label class="question-label">2. <strong>Mood:</strong> What does the use of dark colors and shading say about the atmosphere?</label>
+            <input type="text" placeholder="The colors create a feeling of...">
         </div>
         <div class="question-group">
-            <label class="question-label">3. What does the use of color and shading say about mood?</label>
-            <input type="text" placeholder="Analyze the colors...">
-        </div>
-        <div class="question-group">
-            <label class="question-label">4. Do the pictures make you feel empathy for the main character? Why?</label>
+            <label class="question-label">3. <strong>Empathy:</strong> Do the pictures make you feel empathy for the family? Why?</label>
             <input type="text" placeholder="Your emotional response...">
         </div>
         <div class="question-group">
-            <label class="question-label">5. The dragon's tail is a symbol, but it also acts as <em>foreshadowing</em>. What future threat is this image warning us about?</label>
+            <label class="question-label">4. <strong>Symbolism & Foreshadowing:</strong> The dragon's tail is a symbol, but it also acts as foreshadowing. What future threat is this image warning us about?</label>
             <input type="text" placeholder="Predict the danger...">
+        </div>
+        <div class="question-group">
+            <label class="question-label">6. <strong>Perspective Change:</strong> In the final images, the "camera" pulls back, showing the family from a distance on the big street. How does this change in perspective make them look compared to the close-ups?</label>
+            <input type="text" placeholder="They look smaller and more vulnerable...">
         </div>
     </div>
 
